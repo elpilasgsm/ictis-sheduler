@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Расписание</string>
+    <string name="sfedu_link"><a href="https://sfedu.ru">Южный Федеральный Университет</a></string>
+    <string name="ictis_link"><a href="https://ictis.sfedu.ru">Институт компьютерных технологий и информационной безопасности</a></string>
+    <string name="find_label">Найти</string>
+    <string name="please_select">Выберите...</string>
+</resources>
