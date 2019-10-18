@@ -1,10 +1,10 @@
-package com.example.myapplication.storage;
+package com.ictis.sheduler.storage;
 
 import android.content.Context;
 import android.widget.Toast;
 
 
-import com.example.myapplication.model.SheduledDataStorage;
+import com.ictis.sheduler.model.SheduledDataStorage;
 
 import java.io.*;
 
@@ -30,11 +30,9 @@ public class DataHandler {
                     Toast.makeText(context, "Internal storage is corrupted!.", Toast.LENGTH_LONG).show();
                     return new SheduledDataStorage();
                 }
-            } else {
-                serverCodeDTOS = new SheduledDataStorage();
             }
         }
-        return serverCodeDTOS;
+        return serverCodeDTOS == null ? new SheduledDataStorage() : serverCodeDTOS;
     }
 
     public static void updateData(Context context) {

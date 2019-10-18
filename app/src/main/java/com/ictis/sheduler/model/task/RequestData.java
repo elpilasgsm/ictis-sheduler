@@ -1,4 +1,4 @@
-package com.example.myapplication.model.task;
+package com.ictis.sheduler.model.task;
 
 import java.io.Serializable;
 

@@ -1,24 +1,10 @@
-package com.example.myapplication;
-
-import androidx.annotation.IdRes;
-import androidx.annotation.StringRes;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.text.HtmlCompat;
-import androidx.core.text.util.LinkifyCompat;
+package com.ictis.sheduler;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.Html;
-import android.text.method.LinkMovementMethod;
-import android.text.util.Linkify;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -30,18 +16,23 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.myapplication.components.SelectorListAdapter;
-import com.example.myapplication.components.TimelineListAdapter;
-import com.example.myapplication.model.Choice;
-import com.example.myapplication.model.IctisSelectorResponse;
-import com.example.myapplication.model.SheduleData;
-import com.example.myapplication.model.SheduledDataStorage;
-import com.example.myapplication.model.task.FormattedItemRow;
-import com.example.myapplication.model.task.GetTableAsyncTask;
-import com.example.myapplication.model.task.RequestData;
-import com.example.myapplication.storage.DataHandler;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+
+import com.ictis.sheduler.components.SelectorListAdapter;
+import com.ictis.sheduler.components.TimelineListAdapter;
+import com.ictis.sheduler.model.Choice;
+import com.ictis.sheduler.model.IctisSelectorResponse;
+import com.ictis.sheduler.model.SheduleData;
+import com.ictis.sheduler.model.SheduledDataStorage;
+import com.ictis.sheduler.model.task.FormattedItemRow;
+import com.ictis.sheduler.model.task.GetTableAsyncTask;
+import com.ictis.sheduler.model.task.RequestData;
+import com.ictis.sheduler.storage.DataHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -89,7 +80,6 @@ public class MainActivity extends AppCompatActivity {
         context.findViewById(R.id.favoriteButton).setVisibility(View.VISIBLE);
 
 
-
     }
 
     public static void fillSelector(final IctisSelectorResponse selectorResponse, Activity context) {
@@ -116,6 +106,12 @@ public class MainActivity extends AppCompatActivity {
             new GetTableAsyncTask((data) -> {
                 if (data.getScheduledData() != null) {
                     fillScheduler(data.getScheduledData(), context);
+                    SheduleData storedData = DataHandler.getServerCodeDTOS(context).getByGroup(data.getScheduledData().getTable().getGroup());
+                    favoriteStatus(storedData != null, context);
+                    if (storedData != null) {
+                        DataHandler.getServerCodeDTOS(context).update(data.getScheduledData());
+                        DataHandler.updateData(context);
+                    }
                     CURRENT_DATA = data.getScheduledData();
                 } else if (data.getIctisSelectorResponse() != null) {
                     fillSelector(data.getIctisSelectorResponse(), context);
@@ -139,6 +135,15 @@ public class MainActivity extends AppCompatActivity {
         LayoutInflater inflator = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View v = inflator.inflate(R.layout.search_bar, null);
         actionBar.setCustomView(v);
+    }
+
+    private static void favoriteStatus(boolean checked, Activity context) {
+        if (checked) {
+            ((ImageButton) context.findViewById(R.id.favoriteButton)).setImageResource(android.R.drawable.btn_star_big_on);
+        } else {
+            ((ImageButton) context.findViewById(R.id.favoriteButton)).setImageResource(android.R.drawable.btn_star_big_off);
+
+        }
     }
 
     @Override
@@ -169,18 +174,16 @@ public class MainActivity extends AppCompatActivity {
         });
 
         findViewById(R.id.favoriteButton).setOnClickListener(view -> {
-
-
             if (CURRENT_DATA == null) {
                 return;
             }
             SheduleData getByGroup = DataHandler.getServerCodeDTOS(this).getByGroup(CURRENT_DATA.getTable().getGroup());
             if (getByGroup == null) {
                 DataHandler.getServerCodeDTOS(this).getStorage().add(CURRENT_DATA);
-                ((ImageButton) findViewById(R.id.favoriteButton)).setImageResource(android.R.drawable.btn_star_big_on);
+                favoriteStatus(true, this);
             } else {
                 DataHandler.getServerCodeDTOS(this).getStorage().removeIf(it -> it.getTable().getGroup().equals(CURRENT_DATA.getTable().getGroup()));
-                ((ImageButton) findViewById(R.id.favoriteButton)).setImageResource(android.R.drawable.btn_star_big_off);
+                favoriteStatus(false, this);
             }
             DataHandler.updateData(this);
         });
@@ -196,11 +199,26 @@ public class MainActivity extends AppCompatActivity {
                     return handled;
                 }
         );
+        //prefil from storage if exists
+        if (CURRENT_DATA == null && DataHandler.getServerCodeDTOS(this).getStorage() != null && DataHandler.getServerCodeDTOS(this).getStorage().size() > 0) {
+            SheduleData firstValue = DataHandler.getServerCodeDTOS(this).getStorage().get(0);
+            if (firstValue != null) {
+                CURRENT_DATA = firstValue;
+                favoriteStatus(true, this);
+                fillScheduler(CURRENT_DATA, this);
+                // attempt to get new data
+                fillList("group=" + CURRENT_DATA.getTable().getGroup(), this);
+            }
+            DataHandler.updateData(this);
+        }
+        /*
+        List<View> buttons = new ArrayList<>();
+        buttons.add(new Button())
+        findViewById(R.id.weeks).addChildrenForAccessibility();*/
     }
 
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.layout.favorite_menu, menu);
+        getMenuInflater().inflate(R.menu.favorite_menu, menu);
         return true;
     }
 
@@ -218,11 +236,12 @@ public class MainActivity extends AppCompatActivity {
                     return true;
                 });
             }
-        }else {
+        } else {
             final MenuItem newMenuItem = menu.add("Пусто");
             newMenuItem.setEnabled(false);
 
         }
         return super.onPrepareOptionsMenu(menu);
     }
+
 }

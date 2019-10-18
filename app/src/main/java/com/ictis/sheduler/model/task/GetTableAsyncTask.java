@@ -1,12 +1,12 @@
-package com.example.myapplication.model.task;
+package com.ictis.sheduler.model.task;
 
 import android.os.AsyncTask;
 
 import androidx.arch.core.util.Function;
 
-import com.example.myapplication.model.IctisResponse;
-import com.example.myapplication.model.IctisSelectorResponse;
-import com.example.myapplication.model.SheduleData;
+import com.ictis.sheduler.model.IctisResponse;
+import com.ictis.sheduler.model.IctisSelectorResponse;
+import com.ictis.sheduler.model.SheduleData;
 import com.google.gson.Gson;
 
 import org.json.JSONObject;

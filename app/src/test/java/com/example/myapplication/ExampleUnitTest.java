@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.ictis.sheduler;
 
 import org.junit.Test;
 

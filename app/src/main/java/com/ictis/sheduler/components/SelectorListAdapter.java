@@ -1,19 +1,17 @@
-package com.example.myapplication.components;
+package com.ictis.sheduler.components;
 
 import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
-import com.example.myapplication.MainActivity;
-import com.example.myapplication.R;
-import com.example.myapplication.model.Choice;
-import com.example.myapplication.model.task.FormattedItemRow;
+import com.ictis.sheduler.MainActivity;
+import com.ictis.sheduler.R;
+import com.ictis.sheduler.model.Choice;
 
 public class SelectorListAdapter extends ArrayAdapter<Choice> {
 

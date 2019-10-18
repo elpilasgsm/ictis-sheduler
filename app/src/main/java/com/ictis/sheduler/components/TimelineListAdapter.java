@@ -1,4 +1,4 @@
-package com.example.myapplication.components;
+package com.ictis.sheduler.components;
 
 import android.app.Activity;
 import android.content.Context;
@@ -10,8 +10,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
-import com.example.myapplication.R;
-import com.example.myapplication.model.task.FormattedItemRow;
+import com.ictis.sheduler.R;
+import com.ictis.sheduler.model.task.FormattedItemRow;
 
 public class TimelineListAdapter extends ArrayAdapter<FormattedItemRow> {
 

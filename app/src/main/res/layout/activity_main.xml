@@ -36,6 +36,12 @@
                 android:background="@color/colorWhite"
                   android:layout_gravity="end"
                 app:srcCompat="@android:drawable/btn_star_big_off" />
+
+                <LinearLayout
+                    android:id="@+id/weeks"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" />
         </LinearLayout>
 
         <ListView

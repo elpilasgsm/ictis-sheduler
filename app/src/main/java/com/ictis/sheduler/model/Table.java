@@ -1,5 +1,5 @@
 
-package com.example.myapplication.model;
+package com.ictis.sheduler.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
