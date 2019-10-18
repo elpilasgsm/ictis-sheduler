@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,15 +15,14 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
 
 import com.ictis.sheduler.components.SelectorListAdapter;
 import com.ictis.sheduler.components.TimelineListAdapter;
@@ -79,7 +80,43 @@ public class MainActivity extends AppCompatActivity {
         listTitle.setText(sheduleData.getTable().getName());
         context.findViewById(R.id.favoriteButton).setVisibility(View.VISIBLE);
 
+        fillWeeksSelector(sheduleData, context);
 
+    }
+
+    private static void fillWeeksSelector(final SheduleData sheduleData, final Activity context) {
+        if (sheduleData.getWeeks() != null) {
+            LinearLayout linearLayout = context.findViewById(R.id.weeks_scroll_view);
+            linearLayout.removeAllViews();
+
+            HorizontalScrollView scroll = context.findViewById(R.id.weeks_scroll_bar);
+
+
+            final LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            layoutParams.setMargins(5, 5, 5, 15);
+            for (Integer week : sheduleData.getWeeks()) {
+                Button weekBtn = new Button(new ContextThemeWrapper(context, R.style.WeekButton), null, R.style.WeekButton);
+                ;
+                if (week.equals(sheduleData.getTable().getWeek())) {
+                    weekBtn.setBackgroundResource(R.drawable.active_week_button_shape);
+                } else {
+                    weekBtn.setBackgroundResource(R.drawable.week_button_shape);
+                }
+                weekBtn.setText(String.valueOf(week));
+                linearLayout.addView(weekBtn, layoutParams);
+                weekBtn.setOnClickListener(view -> {
+                    fillList(String.format("group=%s&week=%d", CURRENT_DATA.getTable().getGroup(), week), context);
+                });
+            }
+            int layoutWidth = linearLayout.getWidth();
+            int getSelectedItemSize = (int) (sheduleData.getTable().getWeek() * convertDpToPixel(40, context)) - 50;
+            scroll.scrollTo(getSelectedItemSize > layoutWidth ? layoutWidth : getSelectedItemSize, 0);
+        }
+    }
+
+    public static float convertDpToPixel(float dp, Context context) {
+        return dp * ((float) context.getResources().getDisplayMetrics().densityDpi / DisplayMetrics.DENSITY_DEFAULT);
     }
 
     public static void fillSelector(final IctisSelectorResponse selectorResponse, Activity context) {
