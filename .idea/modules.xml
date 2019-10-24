@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Ictis sheduler.iml" filepath="$PROJECT_DIR$/Ictis sheduler.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ictis-sheduler.iml" filepath="$PROJECT_DIR$/ictis-sheduler.iml" />
     </modules>
   </component>
 </project>

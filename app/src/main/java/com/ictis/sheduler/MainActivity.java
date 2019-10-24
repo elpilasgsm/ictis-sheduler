@@ -37,6 +37,7 @@ import com.ictis.sheduler.storage.DataHandler;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -110,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
                 });
             }
             int layoutWidth = linearLayout.getWidth();
-            int getSelectedItemSize = (int) (sheduleData.getTable().getWeek() * convertDpToPixel(40, context)) - 50;
+            int getSelectedItemSize = (int) ((sheduleData.getTable().getWeek() - 1) * convertDpToPixel(40, context)) - (int) convertDpToPixel(52, context);
             scroll.scrollTo(getSelectedItemSize > layoutWidth ? layoutWidth : getSelectedItemSize, 0);
         }
     }
@@ -165,11 +166,13 @@ public class MainActivity extends AppCompatActivity {
 
     private void processActionBar() {
         ActionBar actionBar = getSupportActionBar();
+        assert actionBar != null;
         actionBar.setDisplayHomeAsUpEnabled(false);
         actionBar.setDisplayShowCustomEnabled(true);
         actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setIcon(R.drawable.sfedu_logo);
         LayoutInflater inflator = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        assert inflator != null;
         View v = inflator.inflate(R.layout.search_bar, null);
         actionBar.setCustomView(v);
     }
