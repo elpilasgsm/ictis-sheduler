@@ -179,9 +179,9 @@ public class MainActivity extends AppCompatActivity {
 
     private static void favoriteStatus(boolean checked, Activity context) {
         if (checked) {
-            ((ImageButton) context.findViewById(R.id.favoriteButton)).setImageResource(android.R.drawable.btn_star_big_on);
+            ((ImageButton) context.findViewById(R.id.favoriteButton)).setImageResource(R.drawable.ic_star_selected);
         } else {
-            ((ImageButton) context.findViewById(R.id.favoriteButton)).setImageResource(android.R.drawable.btn_star_big_off);
+            ((ImageButton) context.findViewById(R.id.favoriteButton)).setImageResource(R.drawable.ic_star_unselected);
 
         }
     }
@@ -272,7 +272,7 @@ public class MainActivity extends AppCompatActivity {
                 newMenuItem.setOnMenuItemClickListener(item -> {
                     CURRENT_DATA = storage;
                     fillScheduler(CURRENT_DATA, this);
-                    ((ImageButton) findViewById(R.id.favoriteButton)).setImageResource(android.R.drawable.btn_star_big_on);
+                    ((ImageButton) findViewById(R.id.favoriteButton)).setImageResource(R.drawable.ic_star_selected);
                     return true;
                 });
             }

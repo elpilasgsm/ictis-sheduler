@@ -30,18 +30,18 @@
                         android:layout_marginStart="10dp"
                         android:layout_marginTop="5dp"
                         android:padding="2dp"
-                        android:text=""
+                        android:textSize="18sp"
                         android:textAppearance="?android:attr/textAppearanceMedium"
                         android:textColor="@color/colorPrimaryDark"
                         android:textStyle="bold"/>
 
                 <ImageButton
                         android:id="@+id/favoriteButton"
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
+                        android:layout_width="34dp"
+                        android:layout_height="34dp"
                         android:layout_gravity="end"
                         android:background="@color/colorWhite"
-                        app:srcCompat="@android:drawable/btn_star_big_off"/>
+                        app:srcCompat="@drawable/ic_star_unselected"/>
 
 
             </LinearLayout>
